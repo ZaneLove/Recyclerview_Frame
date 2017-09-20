@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -36,9 +37,17 @@ public class MainActivity extends AppCompatActivity {
             mList.add(i+"");
         }
         //设置布局管理器
+        //垂直排列
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //水平排列
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+//        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+//        mRecyclerView.setLayoutManager(linearLayoutManager);
+
         //设置item增加和删除是的动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        //设置分割线
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mHomeAdapter = new HomeAdapter(this, mList);
         mRecyclerView.setAdapter(mHomeAdapter);
     }
