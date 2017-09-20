@@ -1,0 +1,30 @@
+apply plugin: 'com.android.application'
+apply from: rootProject.getRootDir().getAbsolutePath() + "/config.gradle"
+
+android {
+    compileSdkVersion project.ext.android.compileSdkVersion
+    buildToolsVersion project.ext.android.buildToolsVersion
+    defaultConfig {
+        applicationId "io.github.zane.recyclerview_frame"
+        minSdkVersion project.ext.android.minSdkVersion
+        targetSdkVersion project.ext.android.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    dependenciesModule()
+    testCompile 'junit:junit:4.12'
+}

@@ -1,0 +1,46 @@
+import java.lang.reflect.Array
+
+ext.android = [
+        compileSdkVersion: 25,
+        buildToolsVersion: "25.0.3",
+        minSdkVersion    : 15,
+        targetSdkVersion : 25,
+]
+
+ext.dependencies = [
+        "appcompat"             : "com.android.support:appcompat-v7:$rootProject.ext.supportVersion",
+        "support"               : "com.android.support:support-v4:$rootProject.ext.supportVersion",
+        "recyclerview-v7"       : "com.android.support:recyclerview-v7:$rootProject.ext.supportVersion",
+        'butterknife'           : ['com.jakewharton:butterknife:8.7.0','com.jakewharton:butterknife-compiler:8.7.0']
+]
+
+ext{
+    dependenciesModule = this.&dependenciesModule;
+    println(' ****************** 全局参数设置 开始！！*********************')
+    deps = [
+            "app":
+                    "appcompat," +
+                    "support," +
+                    "recyclerview-v7," +
+                    "butterknife"
+    ]
+    excludeModule = []
+    excludeGroup = []
+    println(' ****************** 全局参数设置 结束！！*********************')
+}
+
+def dependenciesModule(def depCommonModules) {
+    project.dependencies {
+        //定义在config.gradle数组中，基于项目名称配置的所有dependencies，方便上层app项目直接导入对应的依赖库
+        project.ext.deps[project.name].split(',').each { name ->
+            def depItem = project.ext.dependencies[name.trim()]
+            if ( depItem instanceof Array){
+                compile depItem[0]
+                annotationProcessor depItem[1]
+            }else{
+                compile depItem
+            }
+            println('dependencies -> ' + project.ext.dependencies[name.trim()])
+        }
+    }
+}
