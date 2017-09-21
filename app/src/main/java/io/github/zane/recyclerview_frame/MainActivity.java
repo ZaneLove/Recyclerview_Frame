@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,16 +42,21 @@ public class MainActivity extends AppCompatActivity {
         }
         //设置布局管理器
         //垂直排列
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //水平排列
 //        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 //        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 //        mRecyclerView.setLayoutManager(linearLayoutManager);
+        //实现GirdView
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
+
+        //设置分割线
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        //设置Grid分割线
+        mRecyclerView.addItemDecoration(new DividerGridItemDecoration(this));
 
         //设置item增加和删除是的动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        //设置分割线
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mHomeAdapter = new HomeAdapter(this, mList);
         mRecyclerView.setAdapter(mHomeAdapter);
         mHomeAdapter.setOnItemClickListener(new OnItemClickListener() {
@@ -73,82 +79,5 @@ public class MainActivity extends AppCompatActivity {
                         .show();
             }
         });
-    }
-
-    class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
-
-        private Context mContext;
-        private List<String> mList;
-
-        private OnItemClickListener mOnItemClickListener;
-        public void setOnItemClickListener(OnItemClickListener mOnItemClickListener){
-            this.mOnItemClickListener = mOnItemClickListener;
-        }
-
-        public HomeAdapter(Context context, List<String> list) {
-            this.mContext = context;
-            this.mList = list;
-        }
-
-        public void removeData(int position) {
-            mList.remove(position);
-            notifyItemRemoved(position);
-        }
-
-        /**
-         * 加载条目布局
-         * @param parent
-         * @param viewType
-         * @return
-         */
-        @Override
-        public HomeAdapter.HomeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            HomeViewHolder holder = new HomeViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_recycler, parent, false));
-            return holder;
-        }
-
-        /**
-         * 将试图与数据进行绑定
-         * @param holder
-         * @param position
-         */
-        @Override
-        public void onBindViewHolder(final HomeAdapter.HomeViewHolder holder, int position) {
-            holder.mTvItem.setText(mList.get(position));
-            if(mOnItemClickListener != null) {
-                holder.mTvItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pos = holder.getLayoutPosition();
-                        mOnItemClickListener.onItemClick(holder.mTvItem, pos);
-                    }
-                });
-
-                holder.mTvItem.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        int pos = holder.getLayoutPosition();
-                        mOnItemClickListener.onItemLongClick(holder.mTvItem, pos);
-                        return false;
-                    }
-                });
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return mList != null ? mList.size() : 0;
-        }
-
-        class HomeViewHolder extends RecyclerView.ViewHolder {
-
-            @BindView(R.id.tv_item)
-            TextView mTvItem;
-
-            public HomeViewHolder(View itemView) {
-                super(itemView);
-                ButterKnife.bind(this, itemView);
-            }
-        }
     }
 }
