@@ -20,15 +20,17 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     private Context mContext;
     private List<String> mList;
+    private List<Integer> mHeights;
 
     private OnItemClickListener mOnItemClickListener;
     public void setOnItemClickListener(OnItemClickListener mOnItemClickListener){
         this.mOnItemClickListener = mOnItemClickListener;
     }
 
-    public HomeAdapter(Context context, List<String> list) {
+    public HomeAdapter(Context context, List<String> list, List<Integer> heightList) {
         this.mContext = context;
         this.mList = list;
+        this.mHeights = heightList;
     }
 
     public void removeData(int position) {
@@ -44,7 +46,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
      */
     @Override
     public HomeAdapter.HomeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        HomeViewHolder holder = new HomeViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_recycler, parent, false));
+//        HomeViewHolder holder = new HomeViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_recycler, parent, false));
+
+        //瀑布流
+        HomeViewHolder holder = new HomeViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_grid_recycler, parent, false));
         return holder;
     }
 
@@ -55,6 +60,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
      */
     @Override
     public void onBindViewHolder(final HomeAdapter.HomeViewHolder holder, int position) {
+        //瀑布流
+        ViewGroup.LayoutParams lp = holder.mTvItem.getLayoutParams();
+        lp.height = mHeights.get(position);
+        holder.mTvItem.setLayoutParams(lp);
+
         holder.mTvItem.setText(mList.get(position));
         if(mOnItemClickListener != null) {
             holder.mTvItem.setOnClickListener(new View.OnClickListener() {

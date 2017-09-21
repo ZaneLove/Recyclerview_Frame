@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private HomeAdapter mHomeAdapter;
     private List<String> mList;
+    private List<Integer> mHeights;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i <= 10; i++) {
             mList.add(i+"");
         }
+
+        mHeights = new ArrayList<>();
+        for(int i = 0; i < mList.size(); i++) {
+            mHeights.add((int) (100 + Math.random() * 300));
+        }
+
         //设置布局管理器
         //垂直排列
 //        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -57,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         //设置item增加和删除是的动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mHomeAdapter = new HomeAdapter(this, mList);
+        mHomeAdapter = new HomeAdapter(this, mList, mHeights);
         mRecyclerView.setAdapter(mHomeAdapter);
         mHomeAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
